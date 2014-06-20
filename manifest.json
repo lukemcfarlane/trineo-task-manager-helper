@@ -1,0 +1,18 @@
+{
+	"manifest_version": 2,
+	"name": "Task Manager",
+	"version": "1.0",
+	"description": "Enhances Task Manager UI",
+	"permissions": [
+		"tabs",
+		"https://code.jquery.com/jquery-2.1.1.min.js"
+	],
+	"content_scripts": [{
+		"matches": ["https://trineo--c.ap1.visual.force.com/apex/TaskManager*"],
+		"js": [
+			"jquery-2.1.1.min.js",
+			"background.js",
+			"moment.js"
+		]
+	}]
+}
