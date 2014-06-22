@@ -59,6 +59,12 @@ Duration.prototype.addHour = function() {
 Duration.prototype.addDuration = function(duration) {
 	this.hours += duration.hours;
 	this.mins += duration.mins;
+	this.normalize();
+};
+
+Duration.prototype.normalize = function() {
+	this.hours += Math.floor(this.mins / 60);
+	this.mins = this.mins % 60;
 };
 
 var getAddedDuration = function(duration1, duration2) {
