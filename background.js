@@ -157,8 +157,6 @@ var config = {
 	characterData: true
 };
 
-doTweaks();
-
 // pass in the target node, as well as the observer options
 observer.observe(target, config);
 
@@ -189,4 +187,6 @@ function getCurrentTimerDuration() {
 	return duration;
 }
 
-setInterval(updateHoursToday, 1 * 1000);
+setTimeout(function() {
+	setInterval(updateHoursToday, 1 * 1000);
+}, 3 * 1000);
