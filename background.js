@@ -75,21 +75,23 @@ var getAddedDuration = function(duration1, duration2) {
 };
 
 var updateHoursToday = function() {
-	var currTimerDuration = getCurrentTimerDuration();
-	var statNamesToUpdate = [
-		'Hours Today',
-		'Hours This Week'
-	];
-	if (currTimerDuration !== null) {
-		for (var i = 0; i < statNamesToUpdate.length; i++) {
-			var statName = statNamesToUpdate[i];
-			currentDataDisplayed[statName] = getAddedDuration(
-				mostRecentData[statName],
-				currTimerDuration
-			);
+	if (!isCurrentlySaving) {
+		var currTimerDuration = getCurrentTimerDuration();
+		var statNamesToUpdate = [
+			'Hours Today',
+			'Hours This Week'
+		];
+		if (currTimerDuration !== null) {
+			for (var i = 0; i < statNamesToUpdate.length; i++) {
+				var statName = statNamesToUpdate[i];
+				currentDataDisplayed[statName] = getAddedDuration(
+					mostRecentData[statName],
+					currTimerDuration
+				);
+			}
 		}
+		renderStatValues();
 	}
-	renderStatValues();
 };
 
 var statNamesArr = [
@@ -131,12 +133,21 @@ function doTweaks() {
 	}
 
 	renderStatValues();
+	isCurrentlySaving = false;
+
+	$('.logBtn').click(handleLogBtnClick);
 }
 
 function renderStatValues() {
 	for (statName in mostRecentData) {
 		var durationObj = currentDataDisplayed[statName];
 		setStat(statName, durationObj.getFormattedStr());
+	}
+}
+
+function renderLoadingStats() {
+	for (statName in mostRecentData) {
+		setStat(statName, 'Loading...');
 	}
 }
 
@@ -187,6 +198,14 @@ function getCurrentTimerDuration() {
 	return duration;
 }
 
+function handleLogBtnClick() {
+	console.log('Log button clicked, saving in progress...');
+	isCurrentlySaving = true;
+}
+
+var isCurrentlySaving = false;
+
+doTweaks();
 setTimeout(function() {
 	setInterval(updateHoursToday, 1 * 1000);
 }, 3 * 1000);
