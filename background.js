@@ -136,6 +136,7 @@ function doTweaks() {
 	isCurrentlySaving = false;
 
 	$('.logBtn').click(handleLogBtnClick);
+	initMutationObserver();
 }
 
 function renderStatValues() {
@@ -151,25 +152,28 @@ function renderLoadingStats() {
 	}
 }
 
-// select the target node
-var target = document.querySelector('[id$=mainForm]');
+function initMutationObserver() {
+	// select the target node
+	var target = document.querySelector('[id$=mainForm]');
 
-// create an observer instance
-var observer = new MutationObserver(function(mutations) {
-	mutations.forEach(function(mutation) {
-		doTweaks();
+	// create an observer instance
+	var observer = new MutationObserver(function(mutations) {
+		mutations.forEach(function(mutation) {
+			doTweaks();
+		});
 	});
-});
 
-// configuration of the observer:
-var config = {
-	attributes: true,
-	childList: true,
-	characterData: true
-};
+	// configuration of the observer:
+	var config = {
+		attributes: true,
+		childList: true,
+		characterData: true
+	};
 
-// pass in the target node, as well as the observer options
-observer.observe(target, config);
+	// pass in the target node, as well as the observer options
+	observer.observe(target, config);
+}
+initMutationObserver();
 
 function getStat(statName) {
 	var el = $('label:contains("' + statName + '")').parent().next();
