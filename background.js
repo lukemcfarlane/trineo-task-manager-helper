@@ -12,9 +12,13 @@ function Duration(hours, mins) {
 	this.mins = mins;
 };
 
+Duration.prototype.getDecimal = function() {
+	return this.hours + (this.mins / 60);
+};
+
 var getDurationFromDecimal = function(timeDec) {
 	var duration;
-	var DECIMAL_REGEX = /^\d+(\.\d{1,2})?$/;
+	var DECIMAL_REGEX = /^\d+(\.\d*)?$/;
 	if (DECIMAL_REGEX.test(timeDec.toString())) {
 		var hours = Math.floor(timeDec);
 		var minsDec = timeDec % 1.0;
@@ -26,6 +30,17 @@ var getDurationFromDecimal = function(timeDec) {
 	}
 	return duration;
 };
+
+// TODO: finish implementing
+// var getDurationFromString = function(timeStr) {
+// 	var duration;
+// 	if(HHMM_REGEX.test(timeStr)) {
+// 		duration = new Duration(0, 0);
+// 	} else {
+// 		throw Error('Value \'' + timeDec + '\' is not a string in HH:MM format');
+// 	}
+// 	return duration;
+// };
 
 var getStatType = function(statText) {
 	if (DECIMAL_REGEX.test(statText)) {
@@ -67,11 +82,21 @@ Duration.prototype.normalize = function() {
 	this.mins = this.mins % 60;
 };
 
+var getNormalizedDuration = function(duration) {
+	var normalizedDuration = new Duration(5, 2);
+	return normalizedDuration;
+};
+
 var getAddedDuration = function(duration1, duration2) {
 	var addedDuration = new Duration(0, 0);
 	addedDuration.addDuration(duration1);
 	addedDuration.addDuration(duration2);
 	return addedDuration;
+};
+
+var getSubtractedDuration = function(duration1, duration2) {
+	var normalized = getNormalizedDuration(duration1);
+	return normalized;
 };
 
 var updateHoursToday = function() {
@@ -90,8 +115,28 @@ var updateHoursToday = function() {
 				);
 			}
 		}
+		updateHomeTime();
 		renderStatValues();
 	}
+};
+
+var getCurrentTimeAsDecimal = function() {
+	var now = new Date();
+	return now.getHours() + (now.getMinutes() / 60);
+};
+
+var updateHomeTime = function() {
+	var targetDurationDec = new Duration(8, 0).getDecimal();
+	var hoursToday = currentDataDisplayed['Hours Today'];
+	var hoursTodayDec = hoursToday.getDecimal();
+
+	var deltaDec = targetDurationDec - hoursTodayDec;
+	var homeTimeDec = getCurrentTimeAsDecimal() + deltaDec;
+
+	var homeTimeDuration = getDurationFromDecimal(homeTimeDec);
+
+	currentDataDisplayed['Home Time'] = homeTimeDuration;
+	mostRecentData['Home Time'] = homeTimeDuration;
 };
 
 var statNamesArr = [
@@ -132,6 +177,7 @@ function doTweaks() {
 		}
 	}
 
+	addHometimeLabel();
 	renderStatValues();
 	isCurrentlySaving = false;
 
@@ -174,6 +220,19 @@ function initMutationObserver() {
 	observer.observe(target, config);
 }
 initMutationObserver();
+
+function addHometimeLabel() {
+	var targetHeaderCell = $('[id$=statsSection] td.labelCol.empty');
+	var targetDataCell = targetHeaderCell.next();
+	var newCell = $('<th></th>');
+	newCell.addClass('labelCol');
+	newCell.addClass('vfLabelColTextWrap');
+	newCell.addClass('last');
+	newCell.append('<label>Home Time</label>');
+	targetHeaderCell.replaceWith(newCell);
+	targetDataCell.removeClass('empty');
+	statNamesArr.push('Home Time');
+}
 
 function getStat(statName) {
 	var el = $('label:contains("' + statName + '")').parent().next();
