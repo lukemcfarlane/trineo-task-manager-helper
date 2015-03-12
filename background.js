@@ -168,7 +168,7 @@ function doTweaks() {
 
 	for (statName in mostRecentData) {
 		var durationDec = getStat(statName);
-		if (durationDec !== null) {
+		if (durationDec !== null && typeof durationDec !== 'undefined') {
 			var durationObj = getDurationFromDecimal(durationDec);
 			mostRecentData[statName] = durationObj;
 			currentDataDisplayed[statName] = durationObj;
