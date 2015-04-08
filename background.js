@@ -272,3 +272,37 @@ doTweaks();
 setTimeout(function() {
 	setInterval(updateHoursToday, 1 * 1000);
 }, 3 * 1000);
+
+// Add common entries section:
+var newSectionHTML = '<div>' +
+	'    <div class="pbSubheader brandTertiaryBgr tertiaryPalette">' +
+	'        <h3>Common Entries</h3>' +
+	'    </div>' +
+	'    <div class="pbSubsection">' +
+	'        <table class="list" border="0" cellpadding="0" cellspacing="0">' +
+	'            <colgroup span="3"></colgroup>' +
+	'            <thead class="">' +
+	'                <tr class="headerRow">' +
+	'                    <th class="headerRow" scope="col" colspan="1">' +
+	'                        <div>Project</div>' +
+	'                    </th>' +
+	'                    <th class="headerRow" scope="col" colspan="1">' +
+	'                        <div>Description</div>' +
+	'                    </th>' +
+	'                    <th class="headerRow" scope="col" colspan="1">' +
+	'                        <div></div>' +
+	'                    </th>' +
+	'                </tr>' +
+	'            </thead>' +
+	'            <tbody>' +
+	'                <tr class="dataRow even first last" onmouseover="if (window.hiOn){hiOn(this);}" onmouseout="if (window.hiOff){hiOff(this);}" onblur="if (window.hiOff){hiOff(this);}" onfocus="if (window.hiOn){hiOn(this);}">' +
+	'                    <td class="dataCell" colspan="1" width="8%%">ClearChannel - Proposal+ 2015</td>' +
+	'                    <td class="dataCell" colspan="1" width="25%">Proposal Plus development</td>' +
+	'                    <td class="dataCell" colspan="1" width="8%"><a href="javascript:void(0)" onclick="alert(\'Not yet implemented\')">clone</a></td>' +
+	'                </tr>' +
+	'            </tbody>' +
+	'        </table>' +
+	'   </div>' +
+		'</div>';
+
+$('div[id$=statsSection]').after(newSectionHTML);
